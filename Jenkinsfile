@@ -25,14 +25,14 @@ pipeline {
         stage('Verify') {
             steps {
                 bat 'git --version'
-                bat '"C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.12.101-hotspot\\bin\\java.exe" -version'
-                bat '"C:\\Program Files\\Apache\\Maven\\bin\\mvn.cmd" -version'
+                bat 'java -version'
+                bat 'mvn -version'
             }
         }
 
         stage('Build') {
             steps {
-                bat '"C:\\Program Files\\Apache\\Maven\\bin\\mvn.cmd" clean package'
+                bat 'mvn clean package'
             }
         }
 
@@ -41,21 +41,20 @@ pipeline {
                 expression { params.RUN_APP }
             }
             steps {
-                bat '"C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.12.101-hotspot\\bin\\java.exe" -cp target/classes com.student.App'
+                bat 'java -jar target/student-calculator-1.0.jar'
             }
         }
     }
 
     post {
         success {
-            archiveArtifacts artifacts: 'target/*.jar',
-                fingerprint: true
+            echo 'Pipeline successful'
         }
         failure {
             echo 'Pipeline failed'
         }
         always {
-            echo 'Build completed'
+            echo 'Pipeline finished'
         }
     }
 }
