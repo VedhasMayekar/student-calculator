@@ -41,7 +41,7 @@ pipeline {
                 expression { params.RUN_APP }
             }
             steps {
-                bat 'java -jar target/student-calculator-1.0.jar'
+                bat '"C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.12.101-hotspot\\bin\\java.exe" -cp target/classes com.student.App'
             }
         }
     }
