@@ -32,7 +32,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean package'
+                bat '"C:\\Program Files\\Apache\\Maven\\bin\\mvn.cmd" clean package'
             }
         }
 
