@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -11,41 +10,52 @@ pipeline {
         booleanParam(
             name: 'RUN_APP',
             defaultValue: true,
-            description: 'Run the calculator application'
+            description: 'Run the application'
         )
     }
 
     stages {
-        stage('Verify') {
+        stage('Checkout') {
             steps {
                 deleteDir()
                 checkout scm
+            }
+        }
 
+        stage('Verify') {
+            steps {
                 bat 'git --version'
                 bat 'java -version'
                 bat 'mvn -version'
+            }
+        }
 
-                bat 'mvn clean test'
+        stage('Build') {
+            steps {
+                bat 'mvn clean package'
+            }
+        }
 
-                script {
-                    if (params.RUN_APP) {
-                        bat 'mvn package'
-                        bat 'mvn exec:java -Dexec.mainClass=com.student.App'
-                    }
-                }
+        stage('Run App') {
+            when {
+                expression { params.RUN_APP }
+            }
+            steps {
+                bat 'java -jar target/student-calculator-1.0.jar'
             }
         }
     }
 
     post {
         success {
-            echo 'Build completed successfully!'
+            archiveArtifacts artifacts: 'target/*.jar',
+                fingerprint: true
         }
         failure {
-            echo 'Build failed. Check the console output.'
+            echo 'Pipeline failed'
         }
         always {
-            echo 'Pipeline execution finished.'
+            echo 'Build completed'
         }
     }
 }
