@@ -25,8 +25,8 @@ pipeline {
         stage('Verify') {
             steps {
                 bat 'git --version'
-                bat 'java -version'
-                bat 'mvn -version'
+                bat '"C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.12.101-hotspot\\bin\\java.exe" -version'
+                bat '"C:\\Program Files\\Apache\\Maven\\bin\\mvn.cmd" -version'
             }
         }
 
